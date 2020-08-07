@@ -75,6 +75,7 @@ $(document).ready(function(){
     // on click event for the create poll button
     $(document).on("click", "#create", function () {
         createVoteOption();
+        $("#createPoll").remove();
     })
     
     // on click event for the buttons created in the vote div
