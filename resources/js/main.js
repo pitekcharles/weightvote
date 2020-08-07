@@ -8,6 +8,7 @@ $(document).ready(function(){
         return button;
     }
     
+    // puts the question to be voted on in the Vote section
     function questionTitle() {
         var question = $("#question").val()
         var questionPop = document.createElement("h3");
@@ -15,6 +16,7 @@ $(document).ready(function(){
         $("#vote").append(questionPop);
     }
     
+    // creates the label for option to be voted on as well as the buttons
     function createOption(heading) {
         var option = document.createElement("section");
         var title = document.createElement("h3");
@@ -25,6 +27,7 @@ $(document).ready(function(){
         $("#vote").append(option);
     }
     
+    // puts all the options up on the screen as well as their buttons and a submit button
     function createVoteOption() {
         questionTitle();
         var option1 = $("#option1").val();
@@ -58,13 +61,29 @@ $(document).ready(function(){
         buttonGroup.appendChild(worstButton);
         return buttonGroup;
     }
+
+    // removes choices once a choice has been voted for
+    function removeButtons(event) {
+       var parent = event.target.parentElement;
+       parent.removeChild(parent.childNodes[0]);
+       parent.removeChild(parent.childNodes[0]);
+       parent.removeChild(parent.childNodes[0]);
+       parent.removeChild(parent.childNodes[0]);
+       parent.removeChild(parent.childNodes[0]);
+    }
     
+    // on click event for the create poll button
     $(document).on("click", "#create", function () {
         createVoteOption();
     })
     
-    $(document).on("click", "#vote", function(event){
-        console.log(event.target.parentElement.id);
+    // on click event for the buttons created in the vote div
+    $("#vote").on("click", "button", function(event){
+        if (event.target.id === "submitChoices") {
+            console.log("Its working!");
+        } else {
+            console.log(event.target.parentElement.id);
+            removeButtons(event);
+        }
     })
-
 })
