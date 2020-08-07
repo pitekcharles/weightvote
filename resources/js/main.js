@@ -49,11 +49,11 @@ $(document).ready(function(){
     function createButtonGroup(option) {
         var buttonGroup = document.createElement("div");
         buttonGroup.setAttribute("id", option.split(" ").join("XoX"));
-        var bestButton = createButton(`bestButton${option.split(" ").join("XoX")}`, "Best");
-        var goodButton = createButton(`goodButton${option.split(" ").join("XoX")}`, "Good");
-        var neutralButton = createButton(`neutralButton${option.split(" ").join("XoX")}`, "Neutral");
-        var badButton = createButton(`badButton${option.split(" ").join("XoX")}`, "Bad");
-        var worstButton = createButton(`worstButton${option.split(" ").join("XoX")}`, "Worst");
+        var bestButton = createButton(`bestButton`, "Best");
+        var goodButton = createButton(`goodButton`, "Good");
+        var neutralButton = createButton(`neutralButton`, "Neutral");
+        var badButton = createButton(`badButton`, "Bad");
+        var worstButton = createButton(`worstButton`, "Worst");
         buttonGroup.appendChild(bestButton);
         buttonGroup.appendChild(goodButton);
         buttonGroup.appendChild(neutralButton);
@@ -65,12 +65,67 @@ $(document).ready(function(){
     // removes choices once a choice has been voted for
     function removeButtons(event) {
        var parent = event.target.parentElement;
+       console.log(event.target.parentElement.id);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
+       //testing something strange - note it worked...
+       var newText = "";
+        switch(event.target.id) {
+            case "bestButton":
+                newText = "Best";
+                break;
+            case "goodButton":
+                newText = "Good";
+                break;
+            case "neutralButton":
+                newText = "Neutral";
+                break;
+            case "badButton":
+                newText = "Bad";
+                break;
+            case "worstButton":
+                newText = "Worst";
+                break;
+            default:
+                newText = "";
+                break;
+        }
+        var vote = document.createElement("p");
+        vote.innerText = newText;
+        parent.appendChild(vote);
     }
+
+    // function to put selection value into spot where buttons were - out of commision worked in remove buttons
+    // function showVote (event) {
+    //     var parent = event;
+    //     var newText = "";
+    //     switch(event.target.id) {
+    //         case "bestButton":
+    //             newText = "Best";
+    //             break;
+    //         case "goodButton":
+    //             newText = "Good";
+    //             break;
+    //         case "neutralButton":
+    //             newText = "Neutral";
+    //             break;
+    //         case "badButton":
+    //             newText = "Bad";
+    //             break;
+    //         case "worstButton":
+    //             newText = "Worst";
+    //             break;
+    //         default:
+    //             newText = "";
+    //             break;
+    //     }
+    //     var vote = document.createElement("p");
+    //     vote.innerText = newText;
+    //     console.log(parent);
+    // }
     
     // on click event for the create poll button
     $(document).on("click", "#create", function () {
@@ -83,8 +138,8 @@ $(document).ready(function(){
         if (event.target.id === "submitChoices") {
             console.log("Its working!");
         } else {
-            console.log(event.target.parentElement.id);
             removeButtons(event);
+            // showVote(event);
         }
     })
 })
