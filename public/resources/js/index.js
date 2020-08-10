@@ -71,7 +71,8 @@ $(document).ready(function(){
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
-       //testing something strange - note it worked...
+       //section to replace buttons with text showing what your vote was
+       //had issues making this its own function so put it here
        var newText = "";
         switch(event.target.id) {
             case "bestButton":
@@ -97,35 +98,6 @@ $(document).ready(function(){
         vote.innerText = newText;
         parent.appendChild(vote);
     }
-
-    // function to put selection value into spot where buttons were - out of commision worked in remove buttons
-    // function showVote (event) {
-    //     var parent = event;
-    //     var newText = "";
-    //     switch(event.target.id) {
-    //         case "bestButton":
-    //             newText = "Best";
-    //             break;
-    //         case "goodButton":
-    //             newText = "Good";
-    //             break;
-    //         case "neutralButton":
-    //             newText = "Neutral";
-    //             break;
-    //         case "badButton":
-    //             newText = "Bad";
-    //             break;
-    //         case "worstButton":
-    //             newText = "Worst";
-    //             break;
-    //         default:
-    //             newText = "";
-    //             break;
-    //     }
-    //     var vote = document.createElement("p");
-    //     vote.innerText = newText;
-    //     console.log(parent);
-    // }
     
     // on click event for the create poll button
     $(document).on("click", "#create", function () {
