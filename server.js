@@ -5,9 +5,13 @@ var mysql = require("mysql");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
+const db = require("./models");
+
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+require("./routes/poll-api-routes");
 
 var mysqlConnection = mysql.createConnection({
     host : "localhost",
