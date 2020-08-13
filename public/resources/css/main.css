@@ -1,0 +1,22 @@
+*{
+    box-sizing: border-box;
+}
+
+header h1 {
+    text-align: center;
+    background: darkslategray;
+    color: lightblue;
+    font-weight: bold;
+    font-size: 40px;
+    padding-top: 100px;
+    padding-bottom: 20px;
+}
+
+main section {
+    width: 80%;
+    margin: 10px auto;
+    padding: auto 0;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
