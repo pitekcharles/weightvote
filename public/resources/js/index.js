@@ -18,7 +18,7 @@ $(document).ready(function(){
     
     // creates the label for option to be voted on as well as the buttons
     function createOption(heading) {
-        var option = document.createElement("section");
+        var option = document.createElement("div");
         var title = document.createElement("h3");
         title.innerText = heading;
         var buttons = createButtonGroup(heading);
@@ -49,6 +49,7 @@ $(document).ready(function(){
     function createButtonGroup(option) {
         var buttonGroup = document.createElement("div");
         buttonGroup.setAttribute("id", option.split(" ").join("XoX"));
+        buttonGroup.setAttribute("class", "buttonGroup");
         var bestButton = createButton(`bestButton`, "Best");
         var goodButton = createButton(`goodButton`, "Good");
         var neutralButton = createButton(`neutralButton`, "Neutral");
