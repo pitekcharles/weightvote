@@ -5,13 +5,14 @@ var mysql = require("mysql");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-const db = require("./models");
+// const db = require("./models");
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 require("./routes/poll-api-routes");
+require("./routes/html-routes");
 
 var mysqlConnection = mysql.createConnection({
     host : "localhost",
@@ -28,10 +29,6 @@ mysqlConnection.connect((err)=>{
         console.log("connection failed" + err.stack);
     }
 })
-
-app.get("/", function(req, res){
-    res.sendFile(path.join(__dirname, "public/index.html"));
-});
 
 app.listen(PORT, function(){
     console.log("App listening on PORT " + PORT);
