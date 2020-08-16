@@ -10,10 +10,12 @@ $(document).ready(function(){
     
     // puts the question to be voted on in the Vote section
     function questionTitle() {
-        var question = $("#question").val()
+        var questionInput = $("#question").val()
         var questionPop = document.createElement("h3");
-        questionPop.innerText = question;
+        questionPop.innerText = questionInput;
         $("#vote").append(questionPop);
+        $.post("/api/questions", {question: questionInput})
+            .then(console.log(questionInput));
     }
     
     // creates the label for option to be voted on as well as the buttons

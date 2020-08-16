@@ -3,33 +3,19 @@ var path = require("path");
 var mysql = require("mysql");
 
 var app = express();
-var PORT = process.env.PORT || 3000;
-
-// const db = require("./models");
+var PORT = process.env.PORT || 8080;
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-require("./routes/poll-api-routes");
 require("./routes/html-routes");
+require("./routes/question-api-routes")(app);
 
-var mysqlConnection = mysql.createConnection({
-    host : "localhost",
-    port: 3306,
-    user: "root",
-    password : "password",
-    database : "weightvote_db"
-})
+var db = require("./models");
 
-mysqlConnection.connect((err)=>{
-    if(!err){
-        console.log("Connected");
-    } else {
-        console.log("connection failed" + err.stack);
-    }
-})
-
-app.listen(PORT, function(){
-    console.log("App listening on PORT " + PORT);
-}); 
+db.sequelize.sync({force: true}).then(function(){
+    app.listen(PORT, function(){
+        console.log("App listening on PORT " + PORT);
+    });
+});
