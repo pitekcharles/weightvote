@@ -8,7 +8,7 @@ module.exports = function (sequelize, DataTypes) {
 
     Question.associate = function(models){
         Question.hasMany(models.Option, {
-            onDelete: "cascade";
+            onDelete: "cascade"
         });
     };
 
