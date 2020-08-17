@@ -11,6 +11,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 require("./routes/html-routes");
 require("./routes/question-api-routes")(app);
+require("./routes/option-api-routes")(app);
 
 var db = require("./models");
 

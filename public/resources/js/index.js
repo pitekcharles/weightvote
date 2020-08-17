@@ -1,4 +1,9 @@
+// const question = require("../../../models/question");
+
 $(document).ready(function(){
+    //variable definition
+    // var questionId;
+    
     //function for creating buttons as I believe I will be doing alot of it
     function createButton(id, innerText) {
         var button = document.createElement("button");
@@ -6,6 +11,11 @@ $(document).ready(function(){
         button.setAttribute("type", "button");
         button.innerText = innerText;
         return button;
+    }
+
+    function saveQuestionId (id) {
+        questionId = id;
+        // console.log(questionId);
     }
     
     // puts the question to be voted on in the Vote section
@@ -15,7 +25,7 @@ $(document).ready(function(){
         questionPop.innerText = questionInput;
         $("#vote").append(questionPop);
         $.post("/api/questions", {question: questionInput})
-            .then(console.log(questionInput));
+            .then(result => saveQuestionId(result.id));
     }
     
     // creates the label for option to be voted on as well as the buttons
@@ -31,19 +41,40 @@ $(document).ready(function(){
     
     // puts all the options up on the screen as well as their buttons and a submit button
     function createVoteOption() {
-        questionTitle();
-        var option1 = $("#option1").val();
-        var option2 = $("#option2").val();
-        var option3 = $("#option3").val();
-        var option4 = $("#option4").val();
-        var option5 = $("#option5").val();
-        createOption(option1);
-        createOption(option2);
-        createOption(option3);
-        createOption(option4);
-        createOption(option5);
-        var submitButton = createButton("submitChoices", "Submit");
-        $("#vote").append(submitButton);
+        var questionId = 0;
+        var questionInput = $("#question").val()
+        var questionPop = document.createElement("h3");
+        questionPop.innerText = questionInput;
+        $("#vote").append(questionPop);
+        $.post("/api/questions", {question: questionInput})
+            .then(function(result) {
+                console.log(result.id);
+                questionId = result.id;
+                var option1 = $("#option1").val();
+                var option2 = $("#option2").val();
+                var option3 = $("#option3").val();
+                var option4 = $("#option4").val();
+                var option5 = $("#option5").val();
+                createOption(option1);
+                createOption(option2);
+                createOption(option3);
+                createOption(option4);
+                createOption(option5);
+                var submitButton = createButton("submitChoices", "Submit");
+                $("#vote").append(submitButton);
+                
+                $.post("/api/options", {option: option1, QuestionID: questionId})
+                    .then(console.log("option working maybe"));
+                $.post("/api/options", {option: option2, QuestionID: questionId})
+                    .then(console.log("option working maybe"));
+                $.post("/api/options", {option: option3, QuestionID: questionId})
+                    .then(console.log("option working maybe"));
+                $.post("/api/options", {option: option4, QuestionID: questionId})
+                    .then(console.log("option working maybe"));
+                $.post("/api/options", {option: option5, QuestionID: questionId})
+                    .then(console.log("option working maybe"));
+            });
+        // questionTitle();
     }
     
     
@@ -52,15 +83,15 @@ $(document).ready(function(){
         var buttonGroup = document.createElement("div");
         buttonGroup.setAttribute("id", option.split(" ").join("XoX"));
         buttonGroup.setAttribute("class", "buttonGroup");
-        var bestButton = createButton(`bestButton`, "Best");
-        var goodButton = createButton(`goodButton`, "Good");
-        var neutralButton = createButton(`neutralButton`, "Neutral");
-        var badButton = createButton(`badButton`, "Bad");
-        var worstButton = createButton(`worstButton`, "Worst");
+        var bestButton = createButton(`bestButton`, "No Resistance");
+        // var goodButton = createButton(`goodButton`, "Good");
+        var neutralButton = createButton(`neutralButton`, "Some Resistance");
+        // var badButton = createButton(`badButton`, "Bad");
+        var worstButton = createButton(`worstButton`, "Maximum Resistance");
         buttonGroup.appendChild(bestButton);
-        buttonGroup.appendChild(goodButton);
+        // buttonGroup.appendChild(goodButton);
         buttonGroup.appendChild(neutralButton);
-        buttonGroup.appendChild(badButton);
+        // buttonGroup.appendChild(badButton);
         buttonGroup.appendChild(worstButton);
         return buttonGroup;
     }
@@ -72,26 +103,26 @@ $(document).ready(function(){
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
        parent.removeChild(parent.childNodes[0]);
-       parent.removeChild(parent.childNodes[0]);
-       parent.removeChild(parent.childNodes[0]);
+    //    parent.removeChild(parent.childNodes[0]);
+    //    parent.removeChild(parent.childNodes[0]);
        //section to replace buttons with text showing what your vote was
        //had issues making this its own function so put it here
        var newText = "";
         switch(event.target.id) {
             case "bestButton":
-                newText = "Best";
+                newText = "No Resistance";
                 break;
             case "goodButton":
                 newText = "Good";
                 break;
             case "neutralButton":
-                newText = "Neutral";
+                newText = "Some Resistance";
                 break;
             case "badButton":
                 newText = "Bad";
                 break;
             case "worstButton":
-                newText = "Worst";
+                newText = "Maximum Resistance";
                 break;
             default:
                 newText = "";
@@ -105,7 +136,7 @@ $(document).ready(function(){
     // on click event for the create poll button
     $(document).on("click", "#create", function () {
         createVoteOption();
-        $("#createPoll").remove();
+        // $("#createPoll").remove();
     })
     
     // on click event for the buttons created in the vote div
