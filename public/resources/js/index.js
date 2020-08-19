@@ -1,9 +1,9 @@
 // const question = require("../../../models/question");
 
-$(document).ready(function(){
+$(document).ready(function () {
     //variable definition
     // var questionId;
-    
+
     //function for creating buttons as I believe I will be doing alot of it
     function createButton(id, innerText) {
         var button = document.createElement("button");
@@ -13,21 +13,21 @@ $(document).ready(function(){
         return button;
     }
 
-    function saveQuestionId (id) {
+    function saveQuestionId(id) {
         questionId = id;
         // console.log(questionId);
     }
-    
+
     // puts the question to be voted on in the Vote section
     function questionTitle() {
         var questionInput = $("#question").val()
         var questionPop = document.createElement("h3");
         questionPop.innerText = questionInput;
         $("#vote").append(questionPop);
-        $.post("/api/questions", {question: questionInput})
+        $.post("/api/questions", { question: questionInput })
             .then(result => saveQuestionId(result.id));
     }
-    
+
     // creates the label for option to be voted on as well as the buttons
     function createOption(heading) {
         var option = document.createElement("div");
@@ -38,7 +38,7 @@ $(document).ready(function(){
         $("#vote").append(title);
         $("#vote").append(option);
     }
-    
+
     // puts all the options up on the screen as well as their buttons and a submit button
     function createVoteOption() {
         var questionId = 0;
@@ -46,8 +46,8 @@ $(document).ready(function(){
         var questionPop = document.createElement("h3");
         questionPop.innerText = questionInput;
         $("#vote").append(questionPop);
-        $.post("/api/questions", {question: questionInput})
-            .then(function(result) {
+        $.post("/api/questions", { question: questionInput })
+            .then(function (result) {
                 console.log(result.id);
                 questionId = result.id;
                 var option1 = $("#option1").val();
@@ -62,22 +62,22 @@ $(document).ready(function(){
                 createOption(option5);
                 var submitButton = createButton("submitChoices", "Submit");
                 $("#vote").append(submitButton);
-                
-                $.post("/api/options", {option: option1, QuestionID: questionId})
+
+                $.post("/api/options", { option: option1, QuestionID: questionId })
                     .then(console.log("option working maybe"));
-                $.post("/api/options", {option: option2, QuestionID: questionId})
+                $.post("/api/options", { option: option2, QuestionID: questionId })
                     .then(console.log("option working maybe"));
-                $.post("/api/options", {option: option3, QuestionID: questionId})
+                $.post("/api/options", { option: option3, QuestionID: questionId })
                     .then(console.log("option working maybe"));
-                $.post("/api/options", {option: option4, QuestionID: questionId})
+                $.post("/api/options", { option: option4, QuestionID: questionId })
                     .then(console.log("option working maybe"));
-                $.post("/api/options", {option: option5, QuestionID: questionId})
+                $.post("/api/options", { option: option5, QuestionID: questionId })
                     .then(console.log("option working maybe"));
             });
         // questionTitle();
     }
-    
-    
+
+
     //function to create button group for each voting option
     function createButtonGroup(option) {
         var buttonGroup = document.createElement("div");
@@ -98,17 +98,17 @@ $(document).ready(function(){
 
     // removes choices once a choice has been voted for
     function removeButtons(event) {
-       var parent = event.target.parentElement;
-       console.log(event.target.parentElement.id);
-       parent.removeChild(parent.childNodes[0]);
-       parent.removeChild(parent.childNodes[0]);
-       parent.removeChild(parent.childNodes[0]);
-    //    parent.removeChild(parent.childNodes[0]);
-    //    parent.removeChild(parent.childNodes[0]);
-       //section to replace buttons with text showing what your vote was
-       //had issues making this its own function so put it here
-       var newText = "";
-        switch(event.target.id) {
+        var parent = event.target.parentElement;
+        console.log(event.target.parentElement.id);
+        parent.removeChild(parent.childNodes[0]);
+        parent.removeChild(parent.childNodes[0]);
+        parent.removeChild(parent.childNodes[0]);
+        //    parent.removeChild(parent.childNodes[0]);
+        //    parent.removeChild(parent.childNodes[0]);
+        //section to replace buttons with text showing what your vote was
+        //had issues making this its own function so put it here
+        var newText = "";
+        switch (event.target.id) {
             case "bestButton":
                 newText = "No Resistance";
                 break;
@@ -132,15 +132,37 @@ $(document).ready(function(){
         vote.innerText = newText;
         parent.appendChild(vote);
     }
-    
+
+    //function to pull existing polls from database, this will be temporary to show working product before changing to 2 pages
+    function pagePop() {
+        $.get("/api/questions", function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var questionInput = data[i].question
+                var questionPop = document.createElement("h3");
+                questionPop.innerText = questionInput;
+                $("#vote").append(questionPop);
+                $.get(`/api/options/${data[i].id}`, function (options) {
+                    console.log(options);
+                    for(var i = 0; i < options.length; i++){
+                        createOption(options[i].option);
+                    }
+                })
+                console.log(data);
+            }
+        })
+    }
+
+    //callouts to run on page start
+    pagePop();
+
     // on click event for the create poll button
     $(document).on("click", "#create", function () {
         createVoteOption();
         // $("#createPoll").remove();
     })
-    
+
     // on click event for the buttons created in the vote div
-    $("#vote").on("click", "button", function(event){
+    $("#vote").on("click", "button", function (event) {
         if (event.target.id === "submitChoices") {
             console.log("Its working!");
         } else {
