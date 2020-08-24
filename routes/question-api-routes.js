@@ -7,9 +7,11 @@ module.exports = function (app) {
         });
     });
 
-    app.get("/api/questions", function (req, res) {
-        db.Question.findAll({
-            
+    app.get("/api/questions/:id", function (req, res) {
+        db.Question.findOne({
+            where: {
+                id: req.params.id
+            }
         })
             .then(function (dbQuestion) {
                 res.json(dbQuestion);
