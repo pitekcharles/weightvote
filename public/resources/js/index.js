@@ -52,6 +52,10 @@ $(document).ready(function () {
                 var option3 = $("#option3").val();
                 var option4 = $("#option4").val();
                 var option5 = $("#option5").val();
+                var link = document.createElement("a");
+                console.log(window.location.pathname)
+                link.innerText = window.location.pathname + `${questionId}`;
+                $("#pollLink").append(link);
                 $.post("/api/options", { option: option1, QuestionID: questionId })
                     .then(console.log("option working maybe"));
                 $.post("/api/options", { option: option2, QuestionID: questionId })
@@ -62,6 +66,7 @@ $(document).ready(function () {
                     .then(console.log("option working maybe"));
                 $.post("/api/options", { option: option5, QuestionID: questionId })
                     .then(console.log("option working maybe"));
+
             });
         // questionTitle();
     }
