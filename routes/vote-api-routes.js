@@ -6,4 +6,15 @@ module.exports = function (app) {
             res.json(dbVote);
         });
     });
+
+    app.get("/api/votes/:id", function (req, res){
+        db.Vote.findAll({
+            where: {
+                optionId: req.params.id
+            }
+        })
+        .then(function (dbVote) {
+            res.json(dbVote);
+        });
+    })
 }
