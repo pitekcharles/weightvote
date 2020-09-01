@@ -11,6 +11,10 @@ module.exports = function (sequelize, DataTypes) {
         optionId: {
             type: DataTypes.INTEGER,
             allowNull: false
+        },
+        questionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false
         }
     })
 

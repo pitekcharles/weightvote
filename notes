@@ -5,3 +5,5 @@ firebase
 
 html routes /vote/:id does not work when in the html-routes.js but works when put directly into server file.
 with this setup vote.js is not accessing correctly so script is just in the html file looking to fix this any suggestions
+
+results populating seemingly randomly, correct numbers, not always correct order

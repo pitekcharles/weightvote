@@ -10,7 +10,7 @@ module.exports = function (app) {
     app.get("/api/votes/:id", function (req, res){
         db.Vote.findAll({
             where: {
-                optionId: req.params.id
+                questionId: req.params.id
             }
         })
         .then(function (dbVote) {
