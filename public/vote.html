@@ -73,7 +73,6 @@
         function removeButtons(event) {
             var optionId = event.originalEvent.path[1].id;
             var parent = event.target.parentElement;
-            console.log(event.target.parentElement.id);
             parent.removeChild(parent.childNodes[0]);
             parent.removeChild(parent.childNodes[0]);
             parent.removeChild(parent.childNodes[0]);
@@ -132,101 +131,27 @@
                     newText = "";
                     break;
             }
-            // var vote = document.createElement("p");
-            // vote.innerText = newText;
-            // parent.appendChild(vote);
         }
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
-        console.log(id);
+
         $.get(`/api/questions/${id}`, function (data) {
             var questionInput = data.question
             var questionPop = document.createElement("h3");
             questionPop.innerText = questionInput;
             $("#vote").append(questionPop);
             $.get(`/api/options/${data.id}`, function (options) {
-                console.log(options);
                 for (var i = 0; i < options.length; i++) {
                     createOption(options[i].option, options[i].id);
                 }
             })
-            console.log(data);
         })
 
-        //function to show results on the page
-        function seeResults(event) {
-
-            // console.log(id);
-            $.get(`/api/options/${id}`, function (data) {
-                dataOptions = data;
-                // console.log(dataOptions)
-                for (var i = 0; i < data.length; i++) {
-                    optionsArray.push(data[i].option);
-                    $.get(`/api/votes/${data[i].id}`, function (votes) {
-                        var score = 0;
-                        console.log(votes);
-                        for (var x = 0; x < votes.length; x++) {
-                            score += votes[x].value;
-                        }
-
-                        optionsArray.push(score.toString());
-                        // console.log(i);
-                        // console.log(optionsArray);
-                        // console.log(optionsArray[i]);
-                        // var optionScore = document.createElement("p");
-                        // optionScore.innerText = resistanceArray[i];
-                        // var optionTitle = document.createElement("h3");
-                        // optionTitle.innerText = optionsArray[i];
-                        // $("#results").append(optionTitle);
-                        // $("#results").append(optionScore);
-                    }).then(function (results) {
-                        console.log("done");
-                    });
-                }
-                // popResults(optionsArray);
-            }).then(function () {
-                // // for (var i = 0; i < 5; i++) {
-                // console.log(scores[0]);
-                // console.log(optionsArray[5]);
-                    
-                // $("#results").append(optionTitle);
-                // $("#results").append(optionScore);
-                // // }
-                // popResults(optionsArray)
-            })
-            // console.log(optionsArray);
-        }
-
-        function popResults(array) {
-            for (var i = 0; i < 5; i++) {
-                // console.log(scores[0]);
-                console.log(array[5]);
-                var optionScore = document.createElement("p");
-                optionScore.innerText = array[i + 5];
-                var optionTitle = document.createElement("h3");
-                optionTitle.innerText = array[i];
-                $("#results").append(optionTitle);
-                $("#results").append(optionScore);
-            }
-        }
-        var score;
-        var dataOptions;
-        var resistanceArray = [];
-        var optionsArray = [];
-        seeResults(event);
-        // on click event for the buttons created in the vote div
         $("#vote").on("click", "button", function (event) {
-            if (event.target.id === "submitChoices") {
-
-            } else {
-                removeButtons(event);
-                // showVote(event);
-            }
+            removeButtons(event);
         })
 
         $("#results").on("click", "button", function (event) {
-            
-            // console.log(optionsArray);
             popResults(optionsArray);
 
         })

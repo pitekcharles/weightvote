@@ -67,15 +67,12 @@
 
         $.get(`/api/questions/${id}`, function(data){
             question = data;
-            console.log(question);
         }).then(function(){
             $.get(`/api/options/${id}`, function(data){
                 options = data;
-                console.log(options);
             }).then(function(){
                 $.get(`/api/votes/${id}`, function(data){
                     votes = data;
-                    console.log(votes);
                 }).then(function(){
                     questionPop(question.question);
                     for (var i = 0; i < options.length; i++){
