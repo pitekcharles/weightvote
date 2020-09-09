@@ -70,6 +70,8 @@
             $("#vote").append(option);
         }
 
+        var votes = [];
+
         function removeButtons(event) {
             var optionId = event.originalEvent.path[1].id;
             var parent = event.target.parentElement;
@@ -84,48 +86,48 @@
             switch (event.target.id) {
                 case "bestButton":
                     newText = "No Resistance";
-                    $.post("/api/votes", {
+                    votes.push({
                         vote: newText,
                         value: 0,
                         optionId: optionId,
                         questionId: id
-                    }).then(function (result) {
-                        var vote = document.createElement("p");
-                        vote.innerText = newText;
-                        parent.appendChild(vote);
                     });
+                    var vote = document.createElement("p");
+                    vote.innerText = newText;
+                    parent.appendChild(vote);
+                    parent.appendChild(createButton("undo", "Undo"));
                     break;
                 case "goodButton":
                     newText = "Good";
                     break;
                 case "neutralButton":
                     newText = "Some Resistance";
-                    $.post("/api/votes", {
+                    votes.push({
                         vote: newText,
-                        value: 3,
+                        value: 1,
                         optionId: optionId,
                         questionId: id
-                    }).then(function (result) {
-                        var vote = document.createElement("p");
-                        vote.innerText = newText;
-                        parent.appendChild(vote);
                     });
+                    var vote = document.createElement("p");
+                    vote.innerText = newText;
+                    parent.appendChild(vote);
+                    parent.appendChild(createButton("undo", "Undo"));
                     break;
                 case "badButton":
                     newText = "Bad";
                     break;
                 case "worstButton":
                     newText = "Maximum Resistance";
-                    $.post("/api/votes", {
+                    votes.push({
                         vote: newText,
-                        value: 5,
+                        value: 2,
                         optionId: optionId,
                         questionId: id
-                    }).then(function (result) {
-                        var vote = document.createElement("p");
-                        vote.innerText = newText;
-                        parent.appendChild(vote);
                     });
+                    var vote = document.createElement("p");
+                    vote.innerText = newText;
+                    parent.appendChild(vote);
+                    parent.appendChild(createButton("undo", "Undo"));
                     break;
                 default:
                     newText = "";
@@ -135,20 +137,65 @@
         var url = window.location.pathname;
         var id = url.substring(url.lastIndexOf('/') + 1);
 
-        $.get(`/api/questions/${id}`, function (data) {
-            var questionInput = data.question
-            var questionPop = document.createElement("h3");
-            questionPop.innerText = questionInput;
-            $("#vote").append(questionPop);
-            $.get(`/api/options/${data.id}`, function (options) {
-                for (var i = 0; i < options.length; i++) {
-                    createOption(options[i].option, options[i].id);
+        function undoVote (event) {
+            var parent = event.target.parentElement;
+            var optionId = event.originalEvent.path[1].id;
+            for (var i = 0; i < votes.length; i++) {
+                if (votes[i].optionId === optionId) {
+                    votes.splice(i, 1);
                 }
+            }
+            parent.innerHTML = "";
+            var bestButton = createButton(`bestButton`, "No Resistance");
+            // var goodButton = createButton(`goodButton`, "Good");
+            var neutralButton = createButton(`neutralButton`, "Some Resistance");
+            // var badButton = createButton(`badButton`, "Bad");
+            var worstButton = createButton(`worstButton`, "Maximum Resistance");
+            parent.appendChild(bestButton);
+            // buttonGroup.appendChild(goodButton);
+            parent.appendChild(neutralButton);
+            // buttonGroup.appendChild(badButton);
+            parent.appendChild(worstButton);
+        }
+
+        function submitClick () {
+            console.log("works");
+            for (var i = 0; i < votes.length; i++) {
+                $.post("/api/votes", votes[i]);
+            };
+            $("#submit").remove();
+            localStorage.setItem(`weightvote${id}`, "voted");
+        }
+
+        var checkVote = localStorage.getItem(`weightvote${id}`);
+        if (checkVote === "voted"){
+            var pop = document.createElement("h3");
+            pop.innerText = "You already voted on this poll";
+            $("#vote").append(pop);
+        } else {
+            $.get(`/api/questions/${id}`, function (data) {
+                var questionInput = data.question
+                var questionPop = document.createElement("h3");
+                questionPop.innerText = questionInput;
+                $("#vote").append(questionPop);
+                $.get(`/api/options/${data.id}`, function (options) {
+                    for (var i = 0; i < options.length; i++) {
+                        createOption(options[i].option, options[i].id);
+                    }
+                }).then(function () {
+                    $("#vote").append(createButton("submit", "Submit"));
+                })
             })
-        })
+        }
 
         $("#vote").on("click", "button", function (event) {
-            removeButtons(event);
+            if (event.target.id === "undo") {
+                undoVote(event);
+            } else if (event.target.id === "submit") {
+                submitClick();
+            } else {
+                removeButtons(event);
+            }
         })
 
         $("#results").on("click", "button", function (event) {

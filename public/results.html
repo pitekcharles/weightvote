@@ -55,13 +55,15 @@
 
         function scoreCalc (optionId) {
             var score = 0;
+            var voteCount = 0;
             for (var i = 0; i < votes.length; i++){
                 if (votes[i].optionId === optionId){
                     score += votes[i].value;
+                    voteCount += 1;
                 }            
             }
             var heading = document.createElement("p");
-            heading.innerText = score;
+            heading.innerText = `Resistance Score: ${score}  ||   Number of Votes: ${voteCount}  ||   Average Resistance per vote: ${score/voteCount}`;
             $("#results").append(heading);
         }
 
